@@ -327,9 +327,9 @@ python3 -m pytest --cov=agents tests/
 
 ## 📚 Documentation
 
+- **[Real-World UTA Flow](docs/REAL_WORLD_UTA_FLOW.md)**: How agent-to-agent testing works in practice
 - **[User Guide](docs/UTA_USER_GUIDE.md)**: Comprehensive usage documentation
 - **[Strategy Reference](docs/STRATEGIES_REFERENCE.md)**: Detailed strategy documentation
-- **[API Reference](docs/API_REFERENCE.md)**: Technical API documentation
 - **[Business Reporting Guide](docs/BUSINESS_REPORTING_GUIDE.md)**: Report interpretation guide
 - **[Real Agent Testing Guide](docs/REAL_AGENT_TESTING_GUIDE.md)**: Testing with real AI agents
 
