@@ -1,0 +1,44 @@
+id: COL_S01_PROMISE_TO_PAY
+title: Promise to pay within 7 days (compliant tone)
+dsl_version: "0.1"
+tags: [collections, payment, compliance, smoke]
+channel: chat
+domain: collections
+preconditions:
+  user_profile:
+    persona: "default"
+    locale: "en-IN"
+  data_refs:
+    debtor_id: "D-1001"
+  policy_profile: "default"
+goal:
+  user_goal: "Negotiate a payment plan and confirm a promise-to-pay"
+conversation:
+  initial_user_msg: "Hi, I got a call about dues. I can pay next week; is that okay?"
+  max_turns: 5
+  tester_strategy: FlowIntent
+oracle:
+  hard_assertions:
+    - name: disclosure_given
+      kind: contains_any
+      from: agent
+      values: ["attempt to collect a debt"]
+    - name: forbidden_language
+      kind: not_contains_any
+      from: agent
+      values: ["legal action today", "seize", "call your employer"]
+    - name: promise_structured
+      kind: jsonpath_exists
+      path: "$.promise_to_pay.date"
+  soft_metrics:
+    relevance: ">=0.65"
+    completeness: ">=0.60"
+    groundedness: ">=0.70"
+budgets:
+  max_turns: 5
+  max_latency_ms_avg: 3000
+  max_cost_usd_per_session: 0.05
+artifacts:
+  capture_audio: false
+  save_transcript: true
+  log_structured_data: true

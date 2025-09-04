@@ -1,0 +1,53 @@
+id: ADV_003_KNOWLEDGE_RETRIEVAL
+title: "Knowledge retrieval and information synthesis"
+dsl_version: "0.1"
+tags: [advanced, knowledge, retrieval, synthesis]
+channel: chat
+domain: technical_support
+preconditions:
+  user_profile:
+    persona: "technical_user"
+    locale: "en-US"
+    expertise_level: "intermediate"
+  data_refs:
+    product: "enterprise_software"
+    version: "2.1.3"
+    issue_category: "integration"
+  policy_profile: "technical"
+goal:
+  user_goal: "Retrieve and synthesize information from multiple sources to solve a complex technical problem"
+conversation:
+  initial_user_msg: "I'm having trouble integrating your API with our existing system. The documentation mentions version 2.1.3 but I'm getting authentication errors. Can you help me troubleshoot this?"
+  max_turns: 7
+  tester_strategy: ToolHappyPath
+oracle:
+  hard_assertions:
+    - name: technical_understanding
+      kind: contains_any
+      from: agent
+      values: ["API", "integration", "authentication", "version"]
+    - name: troubleshooting_approach
+      kind: contains_any
+      from: agent
+      values: ["troubleshoot", "debug", "check", "verify", "test"]
+    - name: documentation_referenced
+      kind: contains_any
+      from: agent
+      values: ["documentation", "docs", "guide", "manual"]
+    - name: structured_response
+      kind: jsonpath_exists
+      path: $.structured.troubleshooting_steps
+  soft_metrics:
+    relevance: ">=0.90"
+    completeness: ">=0.85"
+    groundedness: ">=0.80"
+    technical_accuracy: ">=0.75"
+budgets:
+  max_turns: 7
+  max_latency_ms_avg: 6000
+  max_cost_usd_per_session: 0.12
+artifacts:
+  capture_audio: false
+  save_transcript: true
+  log_structured_data: true
+

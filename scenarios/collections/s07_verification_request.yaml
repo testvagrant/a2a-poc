@@ -1,0 +1,48 @@
+id: COL_S07_VERIFICATION_REQUEST
+title: Debt verification request and process
+dsl_version: "0.1"
+tags: [collections, verification, compliance, legal]
+channel: chat
+domain: collections
+preconditions:
+  user_profile:
+    persona: "default"
+    locale: "en-IN"
+  data_refs:
+    debtor_id: "D-1007"
+  policy_profile: "default"
+goal:
+  user_goal: "Request verification of debt and dispute validity"
+conversation:
+  initial_user_msg: "I don't recognize this debt. Can you send me verification of what I owe?"
+  max_turns: 5
+  tester_strategy: FlowIntent
+oracle:
+  hard_assertions:
+    - name: disclosure_given
+      kind: contains_any
+      from: agent
+      values: ["attempt to collect a debt"]
+    - name: verification_acknowledged
+      kind: contains_any
+      from: agent
+      values: ["verification", "send you", "documentation", "proof"]
+    - name: verification_structured
+      kind: jsonpath_exists
+      path: "$.verification_requested"
+    - name: no_threats
+      kind: not_contains_any
+      from: agent
+      values: ["legal action today", "seize", "call your employer"]
+  soft_metrics:
+    relevance: ">=0.65"
+    completeness: ">=0.60"
+    groundedness: ">=0.70"
+budgets:
+  max_turns: 5
+  max_latency_ms_avg: 3000
+  max_cost_usd_per_session: 0.05
+artifacts:
+  capture_audio: false
+  save_transcript: true
+  log_structured_data: true

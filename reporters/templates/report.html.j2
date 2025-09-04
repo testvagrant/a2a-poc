@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UTA Test Report - {{ summary.model|upper }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .summary-card {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .summary-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .summary-card .label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            font-size: 1.8rem;
+            color: #1e3a8a;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #e5e7eb;
+        }
+
+        .scenario-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .scenario-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .scenario-header {
+            padding: 24px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .scenario-title {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .scenario-title h3 {
+            font-size: 1.3rem;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .scenario-id {
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9rem;
+            color: #64748b;
+            background: #f1f5f9;
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-pass {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .status-fail {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .scenario-body {
+            padding: 24px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .metric-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .metric-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .hard-checks {
+            margin-bottom: 24px;
+        }
+
+        .hard-checks h4 {
+            font-size: 1.1rem;
+            color: #374151;
+            margin-bottom: 12px;
+        }
+
+        .check-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .check-tag {
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .check-pass {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .check-fail {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .strategy-info {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .strategy-info h4 {
+            color: #0369a1;
+            margin-bottom: 8px;
+        }
+
+        .strategy-name {
+            font-family: 'Monaco', 'Menlo', monospace;
+            background: #e0f2fe;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+        .tag {
+            background: #e0e7ff;
+            color: #3730a3;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .transcript-toggle {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .transcript-header {
+            background: #f1f5f9;
+            padding: 16px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .transcript-header:hover {
+            background: #e2e8f0;
+        }
+
+        .transcript-content {
+            padding: 20px;
+            display: none;
+        }
+
+        .transcript-content.active {
+            display: block;
+        }
+
+        .message {
+            margin-bottom: 16px;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #e2e8f0;
+        }
+
+        .message.user {
+            background: #f0f9ff;
+            border-left-color: #3b82f6;
+        }
+
+        .message.assistant {
+            background: #f0fdf4;
+            border-left-color: #22c55e;
+        }
+
+        .message-role {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 4px;
+            text-transform: capitalize;
+        }
+
+        .message-content {
+            color: #4b5563;
+            line-height: 1.5;
+        }
+
+        .structured-data {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .structured-data h5 {
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .json-content {
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.85rem;
+            color: #4b5563;
+            background: white;
+            padding: 12px;
+            border-radius: 4px;
+            border: 1px solid #e2e8f0;
+            overflow-x: auto;
+        }
+
+        .judge-info {
+            background: #fefce8;
+            border: 1px solid #fde047;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .judge-info h4 {
+            color: #a16207;
+            margin-bottom: 8px;
+        }
+
+        .judge-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            font-size: 0.9rem;
+        }
+
+        .judge-detail {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .judge-detail .label {
+            color: #a16207;
+            font-weight: 500;
+        }
+
+        .judge-detail .value {
+            color: #374151;
+            font-weight: 600;
+        }
+
+        .toggle-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-icon.rotated {
+            transform: rotate(180deg);
+        }
+
+        .footer {
+            background: #f8fafc;
+            padding: 30px;
+            text-align: center;
+            color: #64748b;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .footer .timestamp {
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 12px;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .scenario-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🤖 Universal Tester-Agent Report</h1>
+            <div class="subtitle">AI Agent Testing & Evaluation Results</div>
+            
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="value">{{ summary.pass_count }}/{{ summary.total }}</div>
+                    <div class="label">Scenarios Passed</div>
+                </div>
+                <div class="summary-card">
+                    <div class="value">{{ summary.model }}</div>
+                    <div class="label">Tested Model</div>
+                </div>
+                <div class="summary-card">
+                    <div class="value">{{ summary.judge_type|upper }}</div>
+                    <div class="label">Judge Type</div>
+                </div>
+                <div class="summary-card">
+                    <div class="value">{{ summary.duration_s }}s</div>
+                    <div class="label">Total Duration</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Test Configuration -->
+            <div class="section">
+                <h2>📋 Test Configuration</h2>
+                <div class="judge-info">
+                    <h4>Judge Configuration</h4>
+                    <div class="judge-details">
+                        <div class="judge-detail">
+                            <span class="label">Judge Mode:</span>
+                            <span class="value">{{ summary.judge_info.mode|upper }}</span>
+                        </div>
+                        {% if summary.judge_info.has_llm_judge %}
+                        <div class="judge-detail">
+                            <span class="label">LLM Model:</span>
+                            <span class="value">{{ summary.judge_info.llm_model }}</span>
+                        </div>
+                        <div class="judge-detail">
+                            <span class="label">LLM Type:</span>
+                            <span class="value">{{ summary.judge_info.llm_type|upper }}</span>
+                        </div>
+                        {% endif %}
+                        <div class="judge-detail">
+                            <span class="label">Policy Profile:</span>
+                            <span class="value">{{ summary.policy_profile }}</span>
+                        </div>
+                        <div class="judge-detail">
+                            <span class="label">Seed:</span>
+                            <span class="value">{{ summary.seed_info.current_seed if summary.seed_info else 'Auto' }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Test Results -->
+            <div class="section">
+                <h2>📊 Test Results</h2>
+                {% for s in sessions %}
+                <div class="scenario-card">
+                    <div class="scenario-header">
+                        <div class="scenario-title">
+                            <h3>{{ s.title }}</h3>
+                            <div class="scenario-id">{{ s.scenario_id }}</div>
+                        </div>
+                        <div class="status-badge {% if s.passed %}status-pass{% else %}status-fail{% endif %}">
+                            {% if s.passed %}✅ PASS{% else %}❌ FAIL{% endif %}
+                        </div>
+                    </div>
+
+                    <div class="scenario-body">
+                        <!-- Strategy Information -->
+                        <div class="strategy-info">
+                            <h4>Applied Strategy</h4>
+                            <div class="strategy-name">{{ s.strategy }}</div>
+                            {% if s.tags %}
+                            <div class="tags">
+                                {% for tag in s.tags %}
+                                <span class="tag">{{ tag }}</span>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Metrics -->
+                        <div class="metrics-grid">
+                            <div class="metric-card">
+                                <div class="metric-label">Relevance</div>
+                                <div class="metric-value">{{ (s.metrics.relevance * 100)|round(1) }}%</div>
+                                <div class="metric-bar">
+                                    <div class="metric-fill" style="width: {{ (s.metrics.relevance * 100)|round(1) }}%"></div>
+                                </div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-label">Completeness</div>
+                                <div class="metric-value">{{ (s.metrics.completeness * 100)|round(1) }}%</div>
+                                <div class="metric-bar">
+                                    <div class="metric-fill" style="width: {{ (s.metrics.completeness * 100)|round(1) }}%"></div>
+                                </div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-label">Groundedness</div>
+                                <div class="metric-value">{{ (s.metrics.groundedness * 100)|round(1) }}%</div>
+                                <div class="metric-bar">
+                                    <div class="metric-fill" style="width: {{ (s.metrics.groundedness * 100)|round(1) }}%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hard Checks -->
+                        <div class="hard-checks">
+                            <h4>Hard Assertions</h4>
+                            <div class="check-tags">
+                                {% for name, ok in s.hard_results.items() %}
+                                <span class="check-tag {% if ok %}check-pass{% else %}check-fail{% endif %}">
+                                    {% if ok %}✅{% else %}❌{% endif %} {{ name }}
+                                </span>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Budget Information -->
+                        {% if s.budget_status %}
+                        <div class="strategy-info">
+                            <h4>Budget Status</h4>
+                            <div class="judge-details">
+                                <div class="judge-detail">
+                                    <span class="label">Turns Used:</span>
+                                    <span class="value">{{ s.budget_status.turns_used }}/{{ s.budget_status.max_turns }}</span>
+                                </div>
+                                <div class="judge-detail">
+                                    <span class="label">Avg Latency:</span>
+                                    <span class="value">{{ s.budget_status.average_latency_ms|round(0) }}ms</span>
+                                </div>
+                                <div class="judge-detail">
+                                    <span class="label">Cost:</span>
+                                    <span class="value">${{ s.budget_status.total_cost_usd|round(4) }}</span>
+                                </div>
+                                <div class="judge-detail">
+                                    <span class="label">Status:</span>
+                                    <span class="value {% if s.budget_status.within_budget %}check-pass{% else %}check-fail{% endif %}">
+                                        {% if s.budget_status.within_budget %}✅ Within Budget{% else %}❌ Over Budget{% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- LLM Judge Results -->
+                        {% if s.llm_result %}
+                        <div class="judge-info {% if s.llm_result.confidence == 0 %}strategy-info{% endif %}">
+                            <h4>LLM Judge Evaluation {% if s.llm_result.confidence == 0 %}(Fallback Mode){% endif %}</h4>
+                            <div class="judge-details">
+                                <div class="judge-detail">
+                                    <span class="label">Judge Model:</span>
+                                    <span class="value">{{ s.llm_result.judge_model }}</span>
+                                </div>
+                                <div class="judge-detail">
+                                    <span class="label">Confidence:</span>
+                                    <span class="value {% if s.llm_result.confidence == 0 %}check-fail{% endif %}">{{ (s.llm_result.confidence * 100)|round(1) }}%</span>
+                                </div>
+                                <div class="judge-detail">
+                                    <span class="label">Evaluation Time:</span>
+                                    <span class="value">{{ s.llm_result.evaluation_time_ms|round(0) }}ms</span>
+                                </div>
+                            </div>
+                            {% if s.llm_result.reasoning %}
+                            <div style="margin-top: 12px;">
+                                <strong>{% if s.llm_result.confidence == 0 %}Status:{% else %}Reasoning:{% endif %}</strong>
+                                <div style="background: white; padding: 12px; border-radius: 4px; margin-top: 8px; font-size: 0.9rem; color: #4b5563;">
+                                    {{ s.llm_result.reasoning }}
+                                </div>
+                                {% if s.llm_result.confidence == 0 %}
+                                <div style="margin-top: 8px; padding: 8px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 4px; font-size: 0.85rem; color: #991b1b;">
+                                    <strong>Note:</strong> LLM Judge is unavailable. Results are based on heuristic evaluation. For sophisticated AI-powered evaluation, ensure API access is properly configured.
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+
+                        <!-- Transcript -->
+                        <div class="transcript-toggle">
+                            <div class="transcript-header" onclick="toggleTranscript('transcript-{{ loop.index }}')">
+                                <span>💬 View Conversation Transcript</span>
+                                <span class="toggle-icon" id="icon-{{ loop.index }}">▼</span>
+                            </div>
+                            <div class="transcript-content" id="transcript-{{ loop.index }}">
+                                {% for m in s.messages %}
+                                <div class="message {{ m.role }}">
+                                    <div class="message-role">{{ m.role }}</div>
+                                    <div class="message-content">{{ m.content }}</div>
+                                </div>
+                                {% endfor %}
+                                
+                                {% if s.agent_structured %}
+                                <div class="structured-data">
+                                    <h5>Structured Response Data</h5>
+                                    <div class="json-content">{{ s.agent_structured|tojson(indent=2) }}</div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="timestamp">
+                Report generated on <span id="timestamp"></span><br>
+                Universal Tester-Agent (UTA) v1.0
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleTranscript(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id.split('-')[1]);
+            
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                icon.classList.remove('rotated');
+            } else {
+                content.classList.add('active');
+                icon.classList.add('rotated');
+            }
+        }
+
+        // Add current timestamp
+        document.addEventListener('DOMContentLoaded', function() {
+            const timestamp = new Date().toLocaleString();
+            document.getElementById('timestamp').textContent = timestamp;
+        });
+    </script>
+</body>
+</html>

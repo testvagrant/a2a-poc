@@ -1,0 +1,41 @@
+id: CORE_001_INTENT_SUCCESS
+title: Single intent success - basic flow completion
+dsl_version: "0.1"
+tags: [core, flow, intent, smoke]
+channel: chat
+preconditions:
+  user_profile: 
+    persona: "default"
+    locale: "en-US"
+  data_refs: {}
+  policy_profile: "default"
+goal:
+  user_goal: "Complete a simple task with clear intent"
+conversation:
+  initial_user_msg: "Hello, I need help with my account."
+  max_turns: 3
+  tester_strategy: FlowIntent
+oracle:
+  hard_assertions:
+    - name: greeting_response
+      kind: contains_any
+      from: agent
+      values: ["hello", "hi", "how can I help", "welcome"]
+    - name: intent_recognition
+      kind: jsonpath_exists
+      path: "$.intent"
+    - name: outcome_recorded
+      kind: jsonpath_exists
+      path: "$.outcome"
+  soft_metrics:
+    relevance: ">=0.10"
+    completeness: ">=0.60"
+    groundedness: ">=0.70"
+budgets:
+  max_turns: 3
+  max_latency_ms_avg: 2000
+  max_cost_usd_per_session: 0.01
+artifacts:
+  capture_audio: false
+  save_transcript: true
+  log_structured_data: true

@@ -1,0 +1,48 @@
+id: COL_S06_CEASE_CONTACT
+title: Cease contact request and compliance
+dsl_version: "0.1"
+tags: [collections, cease_contact, compliance, legal]
+channel: chat
+domain: collections
+preconditions:
+  user_profile:
+    persona: "default"
+    locale: "en-IN"
+  data_refs:
+    debtor_id: "D-1006"
+  policy_profile: "default"
+goal:
+  user_goal: "Request to cease all contact and stop collection calls"
+conversation:
+  initial_user_msg: "I want you to stop calling me. Please cease all contact immediately."
+  max_turns: 4
+  tester_strategy: FlowIntent
+oracle:
+  hard_assertions:
+    - name: disclosure_given
+      kind: contains_any
+      from: agent
+      values: ["attempt to collect a debt"]
+    - name: cease_contact_acknowledged
+      kind: contains_any
+      from: agent
+      values: ["stop contacting", "cease contact", "update our records", "no more calls"]
+    - name: cease_structured
+      kind: jsonpath_exists
+      path: "$.cease_contact.requested"
+    - name: no_threats
+      kind: not_contains_any
+      from: agent
+      values: ["legal action today", "seize", "call your employer"]
+  soft_metrics:
+    relevance: ">=0.65"
+    completeness: ">=0.60"
+    groundedness: ">=0.70"
+budgets:
+  max_turns: 4
+  max_latency_ms_avg: 3000
+  max_cost_usd_per_session: 0.05
+artifacts:
+  capture_audio: false
+  save_transcript: true
+  log_structured_data: true

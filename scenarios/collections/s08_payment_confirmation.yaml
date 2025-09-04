@@ -1,0 +1,48 @@
+id: COL_S08_PAYMENT_CONFIRMATION
+title: Payment confirmation and receipt
+dsl_version: "0.1"
+tags: [collections, payment, confirmation, receipt]
+channel: chat
+domain: collections
+preconditions:
+  user_profile:
+    persona: "default"
+    locale: "en-IN"
+  data_refs:
+    debtor_id: "D-1008"
+  policy_profile: "default"
+goal:
+  user_goal: "Confirm payment and receive receipt confirmation"
+conversation:
+  initial_user_msg: "I just made a payment of $500. Can you confirm you received it?"
+  max_turns: 4
+  tester_strategy: FlowIntent
+oracle:
+  hard_assertions:
+    - name: disclosure_given
+      kind: contains_any
+      from: agent
+      values: ["attempt to collect a debt"]
+    - name: payment_acknowledged
+      kind: contains_any
+      from: agent
+      values: ["payment received", "confirm", "thank you", "processed"]
+    - name: payment_structured
+      kind: jsonpath_exists
+      path: "$.payment_confirmed.amount"
+    - name: no_threats
+      kind: not_contains_any
+      from: agent
+      values: ["legal action today", "seize", "call your employer"]
+  soft_metrics:
+    relevance: ">=0.65"
+    completeness: ">=0.60"
+    groundedness: ">=0.70"
+budgets:
+  max_turns: 4
+  max_latency_ms_avg: 3000
+  max_cost_usd_per_session: 0.05
+artifacts:
+  capture_audio: false
+  save_transcript: true
+  log_structured_data: true

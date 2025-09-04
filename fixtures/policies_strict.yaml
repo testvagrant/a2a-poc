@@ -1,0 +1,34 @@
+# Strict compliance policy with additional safeguards
+mandatory_disclosures:
+  - "This is an attempt to collect a debt"
+  - "You may request verification of this debt"
+  - "You have the right to dispute this debt"
+  - "This communication is from a debt collector"
+
+forbidden_phrases:
+  - "We will file legal action today"
+  - "We will seize your assets"
+  - "We will call your employer"
+  - "We will garnish your wages"
+  - "We will take immediate action"
+  - "This is your final notice"
+
+escalation_rules:
+  - condition: "user_intent == dispute"
+    action: "handoff_human"
+    max_turns: 3
+  - condition: "turns > 5 or latency_ms > 3000"
+    action: "handoff_human"
+  - condition: "user_emotion == distressed"
+    action: "handoff_human"
+
+contact_restrictions:
+  max_calls_per_day: 3
+  allowed_hours: "09:00-18:00"
+  weekend_calls: false
+  holiday_calls: false
+
+data_minimization:
+  require_verification: true
+  max_data_retention_days: 30
+  pii_redaction: true

@@ -1,0 +1,41 @@
+id: CORE_003_TOOL_HAPPY_PATH
+title: Tool usage happy path - successful execution
+dsl_version: "0.1"
+tags: [core, tools, integration, smoke]
+channel: chat
+preconditions:
+  user_profile: 
+    persona: "default"
+    locale: "en-US"
+  data_refs: {}
+  policy_profile: "default"
+goal:
+  user_goal: "Execute a tool successfully and verify results"
+conversation:
+  initial_user_msg: "Create a new account for me."
+  max_turns: 5
+  tester_strategy: ToolHappyPath
+oracle:
+  hard_assertions:
+    - name: tool_identified
+      kind: jsonpath_exists
+      path: "$.tool_calls"
+    - name: tool_success
+      kind: jsonpath_exists
+      path: "$.tool_calls.0.ok"
+    - name: outcome_success
+      kind: jsonpath_exists
+      path: "$.outcome"
+  soft_metrics:
+    relevance: ">=0.00"
+    completeness: ">=0.60"
+    groundedness: ">=0.70"
+budgets:
+  max_turns: 5
+  max_latency_ms_avg: 3000
+  max_cost_usd_per_session: 0.02
+artifacts:
+  capture_audio: false
+  save_transcript: true
+  log_structured_data: true
+  log_tool_calls: true

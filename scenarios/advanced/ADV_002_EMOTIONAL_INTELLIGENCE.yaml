@@ -1,0 +1,52 @@
+id: ADV_002_EMOTIONAL_INTELLIGENCE
+title: "Emotional intelligence and empathy testing"
+dsl_version: "0.1"
+tags: [advanced, emotional, empathy, psychology]
+channel: chat
+domain: customer_service
+preconditions:
+  user_profile:
+    persona: "frustrated_customer"
+    locale: "en-US"
+    emotional_state: "frustrated"
+  data_refs:
+    issue_type: "billing_error"
+    previous_attempts: 2
+  policy_profile: "empathetic"
+goal:
+  user_goal: "Handle a frustrated customer with empathy while resolving their billing issue"
+conversation:
+  initial_user_msg: "This is ridiculous! I've been charged twice for the same service and nobody can help me! I'm so frustrated!"
+  max_turns: 6
+  tester_strategy: FlowIntent
+oracle:
+  hard_assertions:
+    - name: empathy_demonstrated
+      kind: contains_any
+      from: agent
+      values: ["understand", "frustrating", "sorry", "apologize", "empathize"]
+    - name: issue_acknowledged
+      kind: contains_any
+      from: agent
+      values: ["billing", "charge", "duplicate", "error"]
+    - name: solution_offered
+      kind: contains_any
+      from: agent
+      values: ["resolve", "fix", "correct", "refund", "adjust"]
+    - name: emotional_tone_appropriate
+      kind: jsonpath_exists
+      path: $.structured.emotional_tone
+  soft_metrics:
+    relevance: ">=0.85"
+    completeness: ">=0.80"
+    groundedness: ">=0.75"
+    empathy_score: ">=0.70"
+budgets:
+  max_turns: 6
+  max_latency_ms_avg: 4000
+  max_cost_usd_per_session: 0.08
+artifacts:
+  capture_audio: false
+  save_transcript: true
+  log_structured_data: true
+

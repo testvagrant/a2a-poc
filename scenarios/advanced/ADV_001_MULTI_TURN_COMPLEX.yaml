@@ -1,0 +1,49 @@
+id: ADV_001_MULTI_TURN_COMPLEX
+title: "Multi-turn complex conversation with context switching"
+dsl_version: "0.1"
+tags: [advanced, multi-turn, context, complex]
+channel: chat
+domain: general
+preconditions:
+  user_profile:
+    persona: "confused_customer"
+    locale: "en-US"
+  data_refs:
+    account_id: "ACC-789"
+    previous_interactions: 3
+  policy_profile: "default"
+goal:
+  user_goal: "Handle a complex multi-part request that requires context switching and follow-up questions"
+conversation:
+  initial_user_msg: "I need help with my account, but I'm not sure what's wrong. Can you help me figure it out?"
+  max_turns: 8
+  tester_strategy: FlowIntent
+oracle:
+  hard_assertions:
+    - name: initial_greeting
+      kind: contains_any
+      from: agent
+      values: ["help", "assist", "support"]
+    - name: clarification_requested
+      kind: contains_any
+      from: agent
+      values: ["more information", "details", "specific", "what", "how"]
+    - name: context_maintained
+      kind: jsonpath_exists
+      path: $.structured.context_awareness
+    - name: follow_up_handled
+      kind: jsonpath_exists
+      path: $.structured.follow_up_handling
+  soft_metrics:
+    relevance: ">=0.80"
+    completeness: ">=0.75"
+    groundedness: ">=0.85"
+budgets:
+  max_turns: 8
+  max_latency_ms_avg: 5000
+  max_cost_usd_per_session: 0.10
+artifacts:
+  capture_audio: false
+  save_transcript: true
+  log_structured_data: true
+

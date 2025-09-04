@@ -1,0 +1,48 @@
+id: COL_S01_PROMISE_TO_PAY_CHATGPT
+title: "Promise to Pay - ChatGPT Optimized"
+dsl_version: "0.1"
+tags: [collections, chatgpt, promise_to_pay, context_rich]
+channel: chat
+domain: collections
+preconditions:
+  user_profile:
+    persona: "debtor"
+    locale: "en-US"
+    context: "collections_agent"
+  data_refs:
+    debtor_id: "D-1001"
+    balance: 1500.00
+    account_type: "credit_card"
+  policy_profile: "collections_context"
+goal:
+  user_goal: "Act as a professional collections agent and help a debtor make a payment commitment"
+conversation:
+  initial_user_msg: "I'm calling about your credit card account D-1001. You have a balance of $1,500.00 that's past due. I'm here to help you resolve this. Can you make a payment today?"
+  max_turns: 5
+  tester_strategy: FlowIntent
+oracle:
+  hard_assertions:
+    - name: professional_tone
+      kind: contains_any
+      from: agent
+      values: ["help", "resolve", "payment", "account", "balance"]
+    - name: payment_discussion
+      kind: contains_any
+      from: agent
+      values: ["pay", "payment", "amount", "when", "date"]
+    - name: structured_response
+      kind: jsonpath_exists
+      path: $.structured.payment_commitment
+  soft_metrics:
+    relevance: ">=0.70"
+    completeness: ">=0.65"
+    groundedness: ">=0.60"
+budgets:
+  max_turns: 5
+  max_latency_ms_avg: 3000
+  max_cost_usd_per_session: 0.05
+artifacts:
+  capture_audio: false
+  save_transcript: true
+  log_structured_data: true
+

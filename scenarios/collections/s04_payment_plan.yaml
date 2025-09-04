@@ -1,0 +1,48 @@
+id: COL_S04_PAYMENT_PLAN
+title: Payment plan negotiation and setup
+dsl_version: "0.1"
+tags: [collections, payment_plan, negotiation, compliance]
+channel: chat
+domain: collections
+preconditions:
+  user_profile:
+    persona: "default"
+    locale: "en-IN"
+  data_refs:
+    debtor_id: "D-1004"
+  policy_profile: "default"
+goal:
+  user_goal: "Negotiate a payment plan for outstanding debt"
+conversation:
+  initial_user_msg: "I can't pay the full amount right now. Can we work out a payment plan?"
+  max_turns: 6
+  tester_strategy: FlowIntent
+oracle:
+  hard_assertions:
+    - name: disclosure_given
+      kind: contains_any
+      from: agent
+      values: ["attempt to collect a debt"]
+    - name: payment_plan_offered
+      kind: contains_any
+      from: agent
+      values: ["payment plan", "installment", "monthly payment", "schedule"]
+    - name: plan_structured
+      kind: jsonpath_exists
+      path: "$.payment_plan.amount"
+    - name: no_threats
+      kind: not_contains_any
+      from: agent
+      values: ["legal action today", "seize", "call your employer"]
+  soft_metrics:
+    relevance: ">=0.65"
+    completeness: ">=0.60"
+    groundedness: ">=0.70"
+budgets:
+  max_turns: 6
+  max_latency_ms_avg: 3000
+  max_cost_usd_per_session: 0.05
+artifacts:
+  capture_audio: false
+  save_transcript: true
+  log_structured_data: true

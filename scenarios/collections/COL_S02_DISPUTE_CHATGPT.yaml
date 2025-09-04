@@ -1,0 +1,48 @@
+id: COL_S02_DISPUTE_CHATGPT
+title: "Dispute Handling - ChatGPT Optimized"
+dsl_version: "0.1"
+tags: [collections, chatgpt, dispute, context_rich]
+channel: chat
+domain: collections
+preconditions:
+  user_profile:
+    persona: "debtor"
+    locale: "en-US"
+    context: "collections_agent"
+  data_refs:
+    debtor_id: "D-1001"
+    balance: 1500.00
+    account_type: "credit_card"
+  policy_profile: "collections_context"
+goal:
+  user_goal: "Act as a professional collections agent and handle a customer dispute about their account"
+conversation:
+  initial_user_msg: "I'm calling about your credit card account D-1001. You have a balance of $1,500.00 that's past due. I'm here to help you resolve this. Can you make a payment today?"
+  max_turns: 6
+  tester_strategy: FlowIntent
+oracle:
+  hard_assertions:
+    - name: professional_tone
+      kind: contains_any
+      from: agent
+      values: ["help", "resolve", "account", "balance", "understand"]
+    - name: dispute_handling
+      kind: contains_any
+      from: agent
+      values: ["dispute", "disagree", "verify", "check", "investigate"]
+    - name: structured_response
+      kind: jsonpath_exists
+      path: $.structured.dispute_handling
+  soft_metrics:
+    relevance: ">=0.70"
+    completeness: ">=0.65"
+    groundedness: ">=0.60"
+budgets:
+  max_turns: 6
+  max_latency_ms_avg: 4000
+  max_cost_usd_per_session: 0.08
+artifacts:
+  capture_audio: false
+  save_transcript: true
+  log_structured_data: true
+

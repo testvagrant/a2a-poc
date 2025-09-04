@@ -1,0 +1,48 @@
+id: COL_S11_LEGAL_THREAT
+title: Legal threat response and compliance
+dsl_version: "0.1"
+tags: [collections, legal_threat, compliance, escalation]
+channel: chat
+domain: collections
+preconditions:
+  user_profile:
+    persona: "default"
+    locale: "en-IN"
+  data_refs:
+    debtor_id: "D-1011"
+  policy_profile: "default"
+goal:
+  user_goal: "Respond to legal threats and ensure compliance"
+conversation:
+  initial_user_msg: "If you don't pay immediately, we'll take legal action and garnish your wages."
+  max_turns: 4
+  tester_strategy: FlowIntent
+oracle:
+  hard_assertions:
+    - name: disclosure_given
+      kind: contains_any
+      from: agent
+      values: ["attempt to collect a debt"]
+    - name: legal_threat_handled
+      kind: contains_any
+      from: agent
+      values: ["escalate", "supervisor", "manager", "legal department"]
+    - name: compliance_maintained
+      kind: not_contains_any
+      from: agent
+      values: ["legal action today", "seize", "garnish", "threaten"]
+    - name: escalation_structured
+      kind: jsonpath_exists
+      path: "$.escalation.reason"
+  soft_metrics:
+    relevance: ">=0.65"
+    completeness: ">=0.60"
+    groundedness: ">=0.70"
+budgets:
+  max_turns: 4
+  max_latency_ms_avg: 3000
+  max_cost_usd_per_session: 0.05
+artifacts:
+  capture_audio: false
+  save_transcript: true
+  log_structured_data: true

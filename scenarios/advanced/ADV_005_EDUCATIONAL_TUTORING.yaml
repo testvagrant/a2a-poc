@@ -1,0 +1,54 @@
+id: ADV_005_EDUCATIONAL_TUTORING
+title: "Educational tutoring and adaptive learning"
+dsl_version: "0.1"
+tags: [advanced, education, tutoring, adaptive_learning]
+channel: chat
+domain: education
+preconditions:
+  user_profile:
+    persona: "student"
+    locale: "en-US"
+    grade_level: "high_school"
+    subject: "mathematics"
+  data_refs:
+    topic: "quadratic_equations"
+    difficulty_level: "intermediate"
+    learning_style: "visual"
+  policy_profile: "educational"
+goal:
+  user_goal: "Provide adaptive educational tutoring that adjusts to the student's learning pace and style"
+conversation:
+  initial_user_msg: "I'm struggling with quadratic equations. I understand the basic concept but I get confused when there are fractions or decimals involved. Can you help me understand this better?"
+  max_turns: 8
+  tester_strategy: FlowIntent
+oracle:
+  hard_assertions:
+    - name: educational_approach
+      kind: contains_any
+      from: agent
+      values: ["explain", "understand", "learn", "practice", "example"]
+    - name: topic_accuracy
+      kind: contains_any
+      from: agent
+      values: ["quadratic", "equation", "fraction", "decimal", "solve"]
+    - name: adaptive_teaching
+      kind: contains_any
+      from: agent
+      values: ["step by step", "let's try", "practice", "example", "understand"]
+    - name: learning_assessment
+      kind: jsonpath_exists
+      path: $.structured.learning_progress
+  soft_metrics:
+    relevance: ">=0.90"
+    completeness: ">=0.85"
+    groundedness: ">=0.80"
+    educational_effectiveness: ">=0.75"
+budgets:
+  max_turns: 8
+  max_latency_ms_avg: 6000
+  max_cost_usd_per_session: 0.15
+artifacts:
+  capture_audio: false
+  save_transcript: true
+  log_structured_data: true
+

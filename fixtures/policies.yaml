@@ -1,0 +1,14 @@
+mandatory_disclosures:
+  - "This is an attempt to collect a debt"
+  - "You may request verification of this debt"
+
+forbidden_phrases:
+  - "We will file legal action today"
+  - "We will seize your assets"
+  - "We will call your employer"
+
+escalation_rules:
+  - condition: "user_intent == dispute"
+    action: "handoff_human"
+  - condition: "turns > 8 or latency_ms > 4000"
+    action: "handoff_human"

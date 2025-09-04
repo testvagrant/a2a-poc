@@ -1,0 +1,28 @@
+profiles:
+  default:
+    name: "Default Collections Policy"
+    description: "Standard collections compliance for India"
+    locale: "en-IN"
+    currency: "INR"
+    timezone: "Asia/Kolkata"
+    
+  strict:
+    name: "Strict Compliance Policy"
+    description: "Enhanced compliance with additional safeguards"
+    locale: "en-IN"
+    currency: "INR"
+    timezone: "Asia/Kolkata"
+    
+  us_compliance:
+    name: "US Collections Policy"
+    description: "FDCPA compliant collections for US market"
+    locale: "en-US"
+    currency: "USD"
+    timezone: "America/New_York"
+    
+  eu_gdpr:
+    name: "EU GDPR Policy"
+    description: "GDPR compliant collections for EU market"
+    locale: "en-GB"
+    currency: "EUR"
+    timezone: "Europe/London"

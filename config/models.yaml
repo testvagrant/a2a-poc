@@ -1,0 +1,6 @@
+judge:
+  type: heuristic
+  thresholds:
+    relevance: 0.65
+    completeness: 0.60
+    groundedness: 0.70

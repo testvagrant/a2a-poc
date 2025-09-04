@@ -1,0 +1,58 @@
+# Example HTTP Configuration for UTA
+# This file shows how to configure HTTP adapters for real AI agent integration
+
+# Basic HTTP configuration
+base_url: "https://api.example.com/chat"
+api_key: "your-api-key-here"
+timeout: 30
+
+# Custom headers
+headers:
+  X-Domain: "collections"
+  X-Version: "1.0"
+  X-Client: "UTA-Tester"
+
+# Retry configuration
+retry_attempts: 3
+retry_delay: 1.0
+
+# Example configurations for different environments
+
+# Development environment
+development:
+  base_url: "http://localhost:8000/chat"
+  api_key: "dev-api-key"
+  timeout: 10
+
+# Staging environment  
+staging:
+  base_url: "https://staging-api.example.com/chat"
+  api_key: "staging-api-key"
+  timeout: 30
+
+# Production environment
+production:
+  base_url: "https://api.example.com/chat"
+  api_key: "prod-api-key"
+  timeout: 30
+  headers:
+    X-Environment: "production"
+    X-Monitoring: "enabled"
+
+# Collections-specific configuration
+collections:
+  base_url: "https://collections-api.example.com/chat"
+  api_key: "collections-api-key"
+  timeout: 30
+  headers:
+    X-Domain: "collections"
+    X-Compliance: "FDCPA"
+
+# Generic AI agent configuration
+generic:
+  base_url: "https://generic-ai-api.example.com/chat"
+  api_key: "generic-api-key"
+  timeout: 30
+  headers:
+    X-Domain: "generic"
+    X-Capabilities: "chat,tools,memory"

@@ -1,0 +1,53 @@
+id: ADV_004_CREATIVE_PROBLEM_SOLVING
+title: "Creative problem solving and innovative thinking"
+dsl_version: "0.1"
+tags: [advanced, creative, problem_solving, innovation]
+channel: chat
+domain: consulting
+preconditions:
+  user_profile:
+    persona: "business_owner"
+    locale: "en-US"
+    industry: "retail"
+  data_refs:
+    business_size: "small"
+    challenge: "customer_retention"
+    budget: "limited"
+  policy_profile: "creative"
+goal:
+  user_goal: "Provide creative and innovative solutions to a business challenge with limited resources"
+conversation:
+  initial_user_msg: "I run a small retail store and I'm struggling to keep customers coming back. My budget is tight, but I need to find creative ways to improve customer retention. What innovative ideas do you have?"
+  max_turns: 6
+  tester_strategy: FlowIntent
+oracle:
+  hard_assertions:
+    - name: creative_thinking
+      kind: contains_any
+      from: agent
+      values: ["creative", "innovative", "unique", "different", "creative"]
+    - name: budget_awareness
+      kind: contains_any
+      from: agent
+      values: ["budget", "cost-effective", "affordable", "low-cost", "free"]
+    - name: specific_solutions
+      kind: contains_any
+      from: agent
+      values: ["loyalty", "program", "referral", "social media", "community"]
+    - name: actionable_advice
+      kind: jsonpath_exists
+      path: $.structured.actionable_solutions
+  soft_metrics:
+    relevance: ">=0.85"
+    completeness: ">=0.80"
+    groundedness: ">=0.75"
+    creativity_score: ">=0.70"
+budgets:
+  max_turns: 6
+  max_latency_ms_avg: 5000
+  max_cost_usd_per_session: 0.10
+artifacts:
+  capture_audio: false
+  save_transcript: true
+  log_structured_data: true
+

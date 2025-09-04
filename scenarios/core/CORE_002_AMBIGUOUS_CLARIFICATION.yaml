@@ -1,0 +1,41 @@
+id: CORE_002_AMBIGUOUS_CLARIFICATION
+title: Ambiguous intent requires clarification
+dsl_version: "0.1"
+tags: [core, flow, intent, clarification]
+channel: chat
+preconditions:
+  user_profile: 
+    persona: "default"
+    locale: "en-US"
+  data_refs: {}
+  policy_profile: "default"
+goal:
+  user_goal: "Test agent's ability to handle ambiguous requests"
+conversation:
+  initial_user_msg: "I want to do something with my account."
+  max_turns: 4
+  tester_strategy: FlowIntent
+oracle:
+  hard_assertions:
+    - name: clarification_requested
+      kind: contains_any
+      from: agent
+      values: ["what would you like", "can you clarify", "which service", "please specify"]
+    - name: intent_identified
+      kind: jsonpath_exists
+      path: "$.intent"
+    - name: outcome_partial
+      kind: jsonpath_exists
+      path: "$.outcome"
+  soft_metrics:
+    relevance: ">=0.10"
+    completeness: ">=0.60"
+    groundedness: ">=0.70"
+budgets:
+  max_turns: 4
+  max_latency_ms_avg: 2500
+  max_cost_usd_per_session: 0.015
+artifacts:
+  capture_audio: false
+  save_transcript: true
+  log_structured_data: true

@@ -1,0 +1,45 @@
+id: COL_S03_WRONG_PERSON
+title: Wrong person claim—should stop collection and confirm
+dsl_version: "0.1"
+tags: [collections, wrong_person, cease_contact, compliance]
+channel: chat
+domain: collections
+preconditions:
+  user_profile:
+    persona: "default"
+    locale: "en-IN"
+  data_refs:
+    debtor_id: "D-1002"
+  policy_profile: "default"
+goal:
+  user_goal: "Inform that they have the wrong person and stop calls"
+conversation:
+  initial_user_msg: "I keep getting calls, but I'm not the person who owes this."
+  max_turns: 4
+  tester_strategy: FlowIntent
+oracle:
+  hard_assertions:
+    - name: disclosure_given
+      kind: contains_any
+      from: agent
+      values: ["attempt to collect a debt"]
+    - name: cease_contact
+      kind: contains_any
+      from: agent
+      values: ["stop contacting", "update our records", "mark as wrong number"]
+    - name: no_threats
+      kind: not_contains_any
+      from: agent
+      values: ["legal action today", "seize"]
+  soft_metrics:
+    relevance: ">=0.20"
+    completeness: ">=0.60"
+    groundedness: ">=0.70"
+budgets:
+  max_turns: 4
+  max_latency_ms_avg: 3000
+  max_cost_usd_per_session: 0.05
+artifacts:
+  capture_audio: false
+  save_transcript: true
+  log_structured_data: true
