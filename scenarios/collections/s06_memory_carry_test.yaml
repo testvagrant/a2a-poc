@@ -1,0 +1,75 @@
+id: COL_S06_MEMORY_CARRY_TEST
+title: Memory and Context Carry Test (Multi-turn conversation)
+dsl_version: "1.0"
+tags: [collections, memory, context, multi-turn, testing]
+channel: chat
+domain: collections
+
+description: |
+  Tests the agent's ability to maintain context and memory across multiple conversation turns.
+  This is a critical test for real-world AI agents as it validates their ability to remember
+  information shared earlier in the conversation and reference it appropriately.
+
+preconditions:
+  user_profile:
+    persona: "default"
+    locale: "en-IN"
+  data_refs:
+    debtor_id: "D-1001"
+  policy_profile: "default"
+
+conversation:
+  initial_user_msg: "Hi, I'm calling about my account. I have a checking account with account number 12345 and I need help with a payment issue."
+  max_turns: 4
+  tester_strategy: MemoryCarry
+
+budgets:
+  max_turns: 4
+  max_latency_ms_avg: 3000
+  max_cost_usd_per_session: 0.05
+
+oracle:
+  hard_assertions:
+    - name: remembers_account_number
+      kind: contains_any
+      values: ["12345", "account number", "checking account"]
+      description: "Agent should remember the account number mentioned in the first message"
+      
+    - name: maintains_payment_context
+      kind: contains_any
+      values: ["payment", "payment issue", "help with payment"]
+      description: "Agent should maintain context about the payment issue"
+      
+    - name: references_earlier_information
+      kind: contains_any
+      values: ["as you mentioned", "earlier you said", "you told me", "we discussed"]
+      description: "Agent should reference information from earlier in the conversation"
+      
+    - name: no_memory_loss
+      kind: not_contains_any
+      values: ["I don't remember", "I forgot", "what was that", "can you repeat"]
+      description: "Agent should not show signs of memory loss"
+
+  soft_metrics:
+    relevance: ">=0.85"
+    completeness: ">=0.80"
+    groundedness: ">=0.75"
+    confidence: ">=0.80"
+
+goal:
+  user_goal: "Test agent's memory and context carry capabilities across multiple turns"
+  success_criteria: "Agent maintains context and references earlier information appropriately"
+
+expected_behavior:
+  - "Agent should remember the account number (12345) throughout the conversation"
+  - "Agent should maintain context about the payment issue"
+  - "Agent should reference earlier information when appropriate"
+  - "Agent should not ask for information already provided"
+  - "Agent should demonstrate continuity in the conversation flow"
+
+test_metadata:
+  category: "memory_testing"
+  priority: "high"
+  complexity: "medium"
+  domain: "collections"
+  tags: ["memory", "context", "multi-turn", "conversation_flow"]
