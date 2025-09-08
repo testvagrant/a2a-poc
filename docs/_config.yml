@@ -1,0 +1,53 @@
+# GitHub Pages Configuration for UTA
+title: Universal Tester-Agent (UTA)
+description: Revolutionary AI-to-AI testing platform that uses AI agents to test other AI agents
+url: https://testvagrant.github.io/a2a-poc
+baseurl: /a2a-poc
+
+# GitHub Pages settings
+plugins:
+  - jekyll-sitemap
+  - jekyll-feed
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+theme: minima
+
+# Custom settings
+author: TestVagrant
+github_username: testvagrant
+github_repo: a2a-poc
+
+# SEO
+lang: en
+timezone: UTC
+
+# Navigation
+navigation:
+  - title: Features
+    url: /#features
+  - title: How It Works
+    url: /#how-it-works
+  - title: Demo
+    url: /#demo
+  - title: Get Started
+    url: /#get-started
+
+# Social links
+social:
+  github: testvagrant
+  twitter: testvagrant
+
+# Exclude files from processing
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - .sass-cache
+  - .jekyll-cache
+  - .jekyll-metadata
+  - .git
+  - .gitignore

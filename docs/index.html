@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Tester-Agent (UTA) - AI-to-AI Testing Platform</title>
+    <meta name="description" content="Revolutionary AI-to-AI testing platform that uses AI agents to test other AI agents. Comprehensive evaluation with LLM judges and real-world scenarios.">
+    <meta name="keywords" content="AI testing, agent testing, LLM evaluation, AI quality assurance, automated testing, AI agents">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://testvagrant.github.io/a2a-poc/">
+    <meta property="og:title" content="Universal Tester-Agent (UTA) - AI-to-AI Testing Platform">
+    <meta property="og:description" content="Revolutionary AI-to-AI testing platform that uses AI agents to test other AI agents. Comprehensive evaluation with LLM judges and real-world scenarios.">
+    <meta property="og:image" content="https://testvagrant.github.io/a2a-poc/assets/uta-preview.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://testvagrant.github.io/a2a-poc/">
+    <meta property="twitter:title" content="Universal Tester-Agent (UTA) - AI-to-AI Testing Platform">
+    <meta property="twitter:description" content="Revolutionary AI-to-AI testing platform that uses AI agents to test other AI agents. Comprehensive evaluation with LLM judges and real-world scenarios.">
+    <meta property="twitter:image" content="https://testvagrant.github.io/a2a-poc/assets/uta-preview.png">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 100px 0;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero .subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #667eea;
+        }
+
+        .btn-primary:hover {
+            background: #f8f9fa;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border-color: white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 0;
+            background: white;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #1e3a8a;
+            margin-bottom: 60px;
+            font-weight: 700;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 40px 20px;
+            border-radius: 16px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            color: #1e3a8a;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: #64748b;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .step {
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            line-height: 60px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .step h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .step p {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        /* Demo Section */
+        .demo {
+            padding: 100px 0;
+            background: white;
+        }
+
+        .demo-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .demo-text h2 {
+            font-size: 2.5rem;
+            color: #1e3a8a;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        .demo-text p {
+            font-size: 1.2rem;
+            color: #64748b;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .demo-features {
+            list-style: none;
+        }
+
+        .demo-features li {
+            padding: 10px 0;
+            font-size: 1.1rem;
+            color: #1e3a8a;
+            font-weight: 500;
+        }
+
+        .demo-features li::before {
+            content: "✅ ";
+            margin-right: 10px;
+        }
+
+        .demo-visual {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        .demo-visual h3 {
+            color: #1e3a8a;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .demo-visual p {
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .cta p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1e293b;
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #3b82f6;
+        }
+
+        .footer-section p, .footer-section a {
+            color: #94a3b8;
+            text-decoration: none;
+            line-height: 1.6;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #334155;
+            padding-top: 20px;
+            color: #94a3b8;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .demo-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="#" class="logo">🤖 UTA</a>
+                <ul class="nav-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#demo">Demo</a></li>
+                    <li><a href="#get-started">Get Started</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="fade-in-up">Universal Tester-Agent</h1>
+            <p class="subtitle fade-in-up">
+                Revolutionary AI-to-AI testing platform that uses intelligent agents to test other AI agents. 
+                Comprehensive evaluation with LLM judges, real-world scenarios, and sophisticated quality metrics.
+            </p>
+            <div class="cta-buttons fade-in-up">
+                <a href="https://github.com/testvagrant/a2a-poc" class="btn btn-primary" target="_blank">
+                    🚀 View on GitHub
+                </a>
+                <a href="#demo" class="btn btn-secondary">
+                    📊 See Demo
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">Why UTA is the Future of AI Testing</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>AI-to-AI Testing</h3>
+                    <p>Test AI agents with other AI agents. Real conversations, real behavior, real results. No more mock data or simulated responses.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>LLM Judge Evaluation</h3>
+                    <p>Sophisticated GPT-4o powered evaluation that understands context, relevance, and quality. Goes beyond simple rule-based checking.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Comprehensive Metrics</h3>
+                    <p>Hard assertions, soft metrics, budget enforcement, and detailed reporting. Everything you need to ensure AI quality.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Multi-Turn Conversations</h3>
+                    <p>Test complex conversation flows, memory carry, context maintenance, and real-world interaction patterns.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Real-Time Testing</h3>
+                    <p>Test any AI agent via HTTP API. ChatGPT, Claude, custom models - UTA works with any AI system.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>Business-Ready Reports</h3>
+                    <p>Professional reports with collapsible scenarios, detailed analysis, and actionable insights for stakeholders.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How UTA Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Test Agent Initiates</h3>
+                    <p>UTA sends an initial message to your AI agent, simulating a real user interaction with context and intent.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Real Agent Responds</h3>
+                    <p>Your AI agent (ChatGPT, Claude, etc.) responds naturally based on its training and capabilities.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Budget Enforcement</h3>
+                    <p>System monitors conversation length, latency, and cost to ensure tests stay within defined limits.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>LLM Judge Evaluation</h3>
+                    <p>GPT-4o analyzes the entire conversation for quality, relevance, completeness, and compliance.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section class="demo" id="demo">
+        <div class="container">
+            <div class="demo-content">
+                <div class="demo-text">
+                    <h2>See UTA in Action</h2>
+                    <p>
+                        UTA has been successfully tested with real AI agents, demonstrating sophisticated 
+                        conversation testing capabilities across multiple domains.
+                    </p>
+                    <ul class="demo-features">
+                        <li>Memory Carry Testing - Agents remember context across turns</li>
+                        <li>Compliance Validation - Ensures regulatory requirements are met</li>
+                        <li>Multi-Strategy Testing - FlowIntent, MemoryCarry, ToolError strategies</li>
+                        <li>Real-World Scenarios - Collections, customer service, technical support</li>
+                        <li>Budget-Aware Testing - Cost and latency optimization</li>
+                        <li>Professional Reporting - Business-ready insights and analysis</li>
+                    </ul>
+                </div>
+                <div class="demo-visual">
+                    <h3>🎯 Live Demo Results</h3>
+                    <p>UTA successfully tested 16 scenarios with:</p>
+                    <div style="margin: 20px 0; font-size: 1.1rem;">
+                        <div style="margin: 10px 0;">✅ Memory Carry Strategy</div>
+                        <div style="margin: 10px 0;">✅ LLM Judge Evaluation</div>
+                        <div style="margin: 10px 0;">✅ Budget Enforcement</div>
+                        <div style="margin: 10px 0;">✅ Collapsible Reports</div>
+                    </div>
+                    <a href="https://github.com/testvagrant/a2a-poc" class="btn btn-primary" target="_blank">
+                        View Test Results
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="get-started">
+        <div class="container">
+            <h2>Ready to Revolutionize AI Testing?</h2>
+            <p>
+                Join the future of AI quality assurance. UTA provides the tools you need to ensure 
+                your AI agents perform reliably in real-world scenarios.
+            </p>
+            <div class="cta-buttons">
+                <a href="https://github.com/testvagrant/a2a-poc" class="btn btn-primary" target="_blank">
+                    🚀 Explore the Code
+                </a>
+                <a href="https://github.com/testvagrant/a2a-poc/blob/main/README.md" class="btn btn-secondary" target="_blank">
+                    📚 Read Documentation
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>UTA Platform</h3>
+                    <p>Universal Tester-Agent (UTA) is a revolutionary AI-to-AI testing platform that enables comprehensive evaluation of AI agents using sophisticated testing strategies and LLM-powered judges.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Key Features</h3>
+                    <p>• AI-to-AI Testing<br>• LLM Judge Evaluation<br>• Multi-Turn Conversations<br>• Budget Enforcement<br>• Professional Reporting</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <p>
+                        <a href="https://github.com/testvagrant/a2a-poc">GitHub Repository</a><br>
+                        <a href="https://github.com/testvagrant/a2a-poc/blob/main/README.md">Documentation</a><br>
+                        <a href="https://github.com/testvagrant/a2a-poc/blob/main/docs/REAL_WORLD_UTA_FLOW.md">Real-World Flow Guide</a>
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <p>
+                        Built by TestVagrant<br>
+                        <a href="https://github.com/testvagrant/a2a-poc/issues">Report Issues</a><br>
+                        <a href="https://github.com/testvagrant/a2a-poc/discussions">Join Discussions</a>
+                    </p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 TestVagrant. Universal Tester-Agent (UTA) - Revolutionizing AI Testing</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in-up');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all feature cards and steps
+        document.querySelectorAll('.feature-card, .step').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
