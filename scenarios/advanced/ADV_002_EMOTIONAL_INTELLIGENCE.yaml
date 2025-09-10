@@ -18,7 +18,7 @@ goal:
 conversation:
   initial_user_msg: "This is ridiculous! I've been charged twice for the same service and nobody can help me! I'm so frustrated!"
   max_turns: 6
-  tester_strategy: FlowIntent
+  tester_strategy: DynamicCustomerService
 oracle:
   hard_assertions:
     - name: empathy_demonstrated

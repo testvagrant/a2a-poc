@@ -17,7 +17,7 @@ goal:
 conversation:
   initial_user_msg: "I need help with my account, but I'm not sure what's wrong. Can you help me figure it out?"
   max_turns: 8
-  tester_strategy: FlowIntent
+  tester_strategy: DynamicCustomerService
 oracle:
   hard_assertions:
     - name: initial_greeting

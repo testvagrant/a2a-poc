@@ -112,6 +112,12 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .scenario-header:hover {
+            background-color: #f8fafc;
         }
 
         .scenario-title {
@@ -158,6 +164,48 @@
 
         .scenario-body {
             padding: 24px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+        }
+
+        .scenario-body.expanded {
+            max-height: 2000px;
+            padding: 24px;
+        }
+
+        .scenario-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .scenario-toggle-icon {
+            transition: transform 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .scenario-toggle-icon.rotated {
+            transform: rotate(180deg);
+        }
+
+        .scenario-summary {
+            display: flex;
+            gap: 16px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .summary-metric {
+            font-size: 0.85rem;
+            color: #64748b;
+            background: #f1f5f9;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 500;
         }
 
         .metrics-grid {
@@ -508,17 +556,28 @@
                 <h2>📊 Test Results</h2>
                 {% for s in sessions %}
                 <div class="scenario-card">
-                    <div class="scenario-header">
+                    <div class="scenario-header" onclick="toggleScenario('scenario-{{ loop.index }}')">
                         <div class="scenario-title">
                             <h3>{{ s.title }}</h3>
                             <div class="scenario-id">{{ s.scenario_id }}</div>
+                            <div class="scenario-summary">
+                                <span class="summary-metric">Relevance: {{ (s.metrics.relevance * 100)|round(1) }}%</span>
+                                <span class="summary-metric">Completeness: {{ (s.metrics.completeness * 100)|round(1) }}%</span>
+                                <span class="summary-metric">Strategy: {{ s.strategy }}</span>
+                            </div>
                         </div>
-                        <div class="status-badge {% if s.passed %}status-pass{% else %}status-fail{% endif %}">
-                            {% if s.passed %}✅ PASS{% else %}❌ FAIL{% endif %}
+                        <div style="display: flex; align-items: center; gap: 16px;">
+                            <div class="status-badge {% if s.passed %}status-pass{% else %}status-fail{% endif %}">
+                                {% if s.passed %}✅ PASS{% else %}❌ FAIL{% endif %}
+                            </div>
+                            <div class="scenario-toggle">
+                                <span id="scenario-toggle-text-{{ loop.index }}">View Details</span>
+                                <span class="scenario-toggle-icon" id="scenario-icon-{{ loop.index }}">▼</span>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="scenario-body">
+                    <div class="scenario-body" id="scenario-{{ loop.index }}">
                         <!-- Strategy Information -->
                         <div class="strategy-info">
                             <h4>Applied Strategy</h4>
@@ -668,6 +727,22 @@
     </div>
 
     <script>
+        function toggleScenario(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById('scenario-icon-' + id.split('-')[1]);
+            const text = document.getElementById('scenario-toggle-text-' + id.split('-')[1]);
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                icon.classList.remove('rotated');
+                text.textContent = 'View Details';
+            } else {
+                content.classList.add('expanded');
+                icon.classList.add('rotated');
+                text.textContent = 'Hide Details';
+            }
+        }
+
         function toggleTranscript(id) {
             const content = document.getElementById(id);
             const icon = document.getElementById('icon-' + id.split('-')[1]);

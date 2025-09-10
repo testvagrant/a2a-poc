@@ -4,6 +4,10 @@ from .flow_intent import FlowIntentStrategy
 from .tool_happy_path import ToolHappyPathStrategy
 from .memory_carry import MemoryCarryStrategy
 from .tool_error import ToolErrorStrategy
+from .dynamic_ai_strategy import DynamicAIStrategy
+from .dynamic_financial_strategy import DynamicFinancialStrategy
+from .dynamic_customer_service_strategy import DynamicCustomerServiceStrategy
+from .dynamic_strategy_factory import DynamicStrategyFactory
 
 class StrategyRegistry:
     """
@@ -16,10 +20,17 @@ class StrategyRegistry:
         
     def _register_default_strategies(self):
         """Register the default strategies."""
+        # Traditional strategies
         self.register("FlowIntent", FlowIntentStrategy)
         self.register("ToolHappyPath", ToolHappyPathStrategy)
         self.register("MemoryCarry", MemoryCarryStrategy)
         self.register("ToolError", ToolErrorStrategy)
+        
+        # Dynamic AI-powered strategies
+        self.register("DynamicAI", DynamicAIStrategy)
+        self.register("DynamicFinancial", DynamicFinancialStrategy)
+        self.register("DynamicCustomerService", DynamicCustomerServiceStrategy)
+        
         # TODO: Register other strategies as they're implemented
         # self.register("Disturbance", DisturbanceStrategy)
         # self.register("Planner", PlannerStrategy)
@@ -49,3 +60,17 @@ class StrategyRegistry:
     def validate_strategy(self, strategy_name: str) -> bool:
         """Check if a strategy name is valid."""
         return strategy_name in self._strategies
+        
+    def create_dynamic_strategy(self, agent_url: str, scenario: Dict, agent_name: str = None) -> BaseStrategy:
+        """Create a dynamic strategy using the factory."""
+        factory = DynamicStrategyFactory()
+        return factory.create_strategy(agent_url, scenario, agent_name)
+        
+    def get_dynamic_strategies(self) -> list[str]:
+        """Get list of dynamic AI-powered strategies."""
+        dynamic_strategies = [
+            "DynamicAI",
+            "DynamicFinancial", 
+            "DynamicCustomerService"
+        ]
+        return [s for s in dynamic_strategies if s in self._strategies]

@@ -1,0 +1,42 @@
+id: TEST_DYNAMIC_FINANCIAL
+title: "Dynamic Financial Strategy Test"
+dsl_version: "1.0"
+tags: [financial, dynamic, test]
+channel: chat
+domain: financial
+preconditions:
+  user_profile:
+    persona: "banking_customer"
+    locale: "en-US"
+  data_refs:
+    account_id: "ACC-12345"
+    account_type: "checking"
+  policy_profile: "financial"
+goal:
+  user_goal: "Check account balance and make a payment"
+conversation:
+  initial_user_msg: "Hi, I want to check my account balance and make a payment of $100."
+  max_turns: 5
+  tester_strategy: DynamicFinancial
+oracle:
+  hard_assertions:
+    - name: balance_provided
+      kind: contains_any
+      from: agent
+      values: ["balance", "account", "amount"]
+    - name: payment_processed
+      kind: contains_any
+      from: agent
+      values: ["payment", "transfer", "process"]
+  soft_metrics:
+    relevance: ">=0.80"
+    completeness: ">=0.75"
+    groundedness: ">=0.85"
+budgets:
+  max_turns: 5
+  max_latency_ms_avg: 3000
+  max_cost_usd_per_session: 0.05
+artifacts:
+  capture_audio: false
+  save_transcript: true
+  log_structured_data: true

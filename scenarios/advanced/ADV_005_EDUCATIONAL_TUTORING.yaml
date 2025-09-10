@@ -20,7 +20,7 @@ goal:
 conversation:
   initial_user_msg: "I'm struggling with quadratic equations. I understand the basic concept but I get confused when there are fractions or decimals involved. Can you help me understand this better?"
   max_turns: 8
-  tester_strategy: FlowIntent
+  tester_strategy: DynamicCustomerService
 oracle:
   hard_assertions:
     - name: educational_approach

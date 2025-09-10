@@ -52,6 +52,19 @@ The Universal Tester-Agent (UTA) is a revolutionary testing platform that enable
 2. **ToolHappyPathStrategy**: Tests successful tool usage and function calling
 3. **MemoryCarryStrategy**: Tests context retention across conversation turns
 4. **ToolErrorStrategy**: Tests error handling and recovery mechanisms
+5. **DynamicAIStrategy**: 🚀 **NEW!** AI-powered dynamic message generation that adapts to any agent automatically
+
+### 🚀 Dynamic AI Strategy (Scalable Solution)
+
+The **DynamicAI** strategy represents a breakthrough in scalability:
+
+- **🤖 AI-Powered**: Uses LLM to generate contextually appropriate messages
+- **🔄 Adaptive**: Automatically adapts to any agent's capabilities and conversation style
+- **🌐 Cross-Platform**: Works with any OpenAI-compatible API across different domains
+- **⚡ Zero Configuration**: No manual setup required - automatically discovers agent capabilities
+- **📈 Scalable**: Eliminates the need for hardcoded strategies across different applications
+
+**Learn More**: [Dynamic UTA Platform Documentation](docs/DYNAMIC_UTA_PLATFORM.md)
 
 ### Planned Strategies
 

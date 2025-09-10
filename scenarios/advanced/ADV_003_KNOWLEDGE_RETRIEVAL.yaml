@@ -19,7 +19,7 @@ goal:
 conversation:
   initial_user_msg: "I'm having trouble integrating your API with our existing system. The documentation mentions version 2.1.3 but I'm getting authentication errors. Can you help me troubleshoot this?"
   max_turns: 7
-  tester_strategy: ToolHappyPath
+  tester_strategy: DynamicCustomerService
 oracle:
   hard_assertions:
     - name: technical_understanding

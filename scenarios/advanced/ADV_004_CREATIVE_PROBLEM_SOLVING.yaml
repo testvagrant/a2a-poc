@@ -19,7 +19,7 @@ goal:
 conversation:
   initial_user_msg: "I run a small retail store and I'm struggling to keep customers coming back. My budget is tight, but I need to find creative ways to improve customer retention. What innovative ideas do you have?"
   max_turns: 6
-  tester_strategy: FlowIntent
+  tester_strategy: DynamicCustomerService
 oracle:
   hard_assertions:
     - name: creative_thinking
